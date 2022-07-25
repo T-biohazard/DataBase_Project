@@ -1,3 +1,8 @@
+--Japanese Cities' 
+select *
+from CITY
+where COUNTRYCODE='JPN' ;
+
 --Weather Observation Station 1
 select city, state
 from STATION; 
@@ -25,8 +30,4 @@ FROM station
  city LIKE "I%" OR city LIKE "O%" OR city LIKE "U%";
 
  --Weather Observation Station 7
-SELECT DISTINCT CITY FROM STATION 
-WHERE CITY LIKE '%a' OR CITY LIKE '%e' OR CITY LIKE '%i' OR CITY LIKE '%o'
- OR CITY LIKE '%u';
-
---Weather Observation Station 
+ 
