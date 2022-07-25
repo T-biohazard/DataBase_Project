@@ -1,1 +1,215 @@
 
+-- CSE302, Section 2, Lab 04
+
+-- LIKE operator 
+-- 1. Find name of instructors start with 'E'.
+
+SELECT name
+FROM instructor
+WHERE name LIKE 'E%';
+
+-- 2. Find course title which has 'Intro' as a substring.
+
+SELECT title
+FROM course
+WHERE title LIKE '%Intro%';
+
+-- 3. Find student names ends with 'A' (case insensitive).
+SELECT name
+FROM student
+WHERE name LIKE '%A' or name LIKE '%a';
+
+SELECT name
+FROM student
+WHERE upper (name) LIKE '%A';
+
+-- 4. Find dept name and budget of those which are located 
+in a building name starts with 'P'.
+
+SELECT dept_name, budget
+FROM department
+WHERE building LIKE 'P%';
+
+
+-- 5. Find instructor id, name and salary of those who 
+advise students and their name has 'ri' as a substring.
+
+SELECT id, name, salary
+FROM instructor i, advisor a
+WHERE i.id = a.i_id and name LIKE '%ri%';
+
+-- DISTINCT operator
+
+SELECT DISTINCT id, salary
+FROM instructor;
+
+-- Arithmetic Operation in SELECT
+
+-- Find instructor id, name and their monthly salary. 
+Assume that the salary column in instructor relation 
+contains annual salary.
+
+
+SELECT id, name, salary/12 as MONTHLY_SALARY
+FROM instructor;
+
+-- Prepare a report that shows id, name of instructors
+with their current salary and 15% of salary which is 
+regarded as the bonus salary.
+
+SELECT id, name, salary, salary*0.15 AS BONUS_SALARY
+FROM instructor;
+
+-- Prepare a report that shows id, name of instructors
+with their current salary and 15% of salary which is 
+regarded as the bonus salary. ALso include the total
+salary which is the sum of current salary and bonus amount
+
+SELECT id, name, salary, salary*0.15 AS BONUS_SALARY, 
+       salary * 1.15 AS TOTAL_SALARY 
+FROM instructor;
+
+-- JOIN operations
+
+-- Find student name and their advisor names.
+
+SELECT s.name as S_NAME, i.name as I_NAME
+FROM instructor i, student s, advisor a
+WHERE i.id = a.i_id and s.id = a.s_id; 
+
+SELECT s.name as S_NAME, i.name as I_NAME
+FROM (instructor i JOIN advisor a ON i.id = a.i_id)
+      JOIN student s ON s.id = a.s_id; 
+
+
+-- Find instructor name, course title they taught and
+the department name offering the course in Fall 2009 
+semester.
+
+SELECT i.name, title, c.dept_name
+FROM instructor i, teaches t, course c
+WHERE i.id = t.id and t.course_id = c.course_id
+      and semester = 'Fall' and year = 2009;
+	  
+SELECT name, title, c.dept_name
+FROM (instructor NATURAL JOIN teaches) JOIN course c
+     ON teaches.course_id = c.course_id
+WHERE semester = 'Fall' and year = 2009;
+
+SELECT name, title, c.dept_name
+FROM (instructor NATURAL JOIN teaches), course c
+WHERE teaches.course_id = c.course_id 
+     and semester = 'Fall' and year = 2009;
+	 
+SELECT name, title, c.dept_name
+FROM (instructor JOIN teaches USING (id)), course c
+WHERE teaches.course_id = c.course_id 
+     and semester = 'Fall' and year = 2009;
+	 
+-- ORDER BY
+
+SELECT *
+FROM instructor
+ORDER BY salary desc;
+
+SELECT *
+FROM instructor
+ORDER BY salary desc, id;
+
+
+-- SET UNION
+-- Find course id which were offered in Fall 2009 
+or Spring 2010 semester.
+
+SELECT course_id 
+FROM Section
+WHERE semester = 'Fall' and year = 2009
+UNION
+SELECT course_id 
+FROM Section
+WHERE semester = 'Spring' and year = 2010;
+
+-- SET INTERSECT
+
+-- Find course id which were offered in both Fall 2009 
+and Spring 2010 semester.
+
+SELECT course_id 
+FROM Section
+WHERE semester = 'Fall' and year = 2009
+INTERSECT
+SELECT course_id 
+FROM Section
+WHERE semester = 'Spring' and year = 2010;
+
+
+-- SET DIFFERENCE
+-- Find course id which were offered in Fall 2009 
+but not in Spring 2010 semester.
+SELECT course_id 
+FROM Section
+WHERE semester = 'Fall' and year = 2009
+MINUS
+SELECT course_id 
+FROM Section
+WHERE semester = 'Spring' and year = 2010;
+
+-- Aggregates
+
+-- Find average salary of all instructors.
+SELECT avg(salary)
+FROM instructor;
+
+
+-- Find average salary and sum of salaries of 
+all instructors.
+SELECT avg(salary), sum(salary) 
+FROM instructor;
+
+
+-- Find number of instructors and average and sum of
+salaries of instructors for each department.
+
+SELECT dept_name, COUNT(*), avg(salary), sum(salary)
+FROM instructor
+GROUP BY dept_name;
+ 
+-- -- Find number of instructors and average and sum of
+salaries of instructors for each department except
+History and Physics.
+
+
+SELECT dept_name, COUNT(*), avg(salary), sum(salary)
+FROM instructor
+WHERE dept_name != 'Physics' and dept_name != 'History'
+GROUP BY dept_name;
+
+SELECT dept_name, COUNT(*), avg(salary), sum(salary)
+FROM instructor
+WHERE NOT (dept_name = 'Physics' or dept_name = 'History')
+GROUP BY dept_name;
+
+
+-- -- Find number of instructors and average and sum of
+salaries of instructors for each department except
+History and Physics. Do not include any rows in which
+the avg. salary is not greater than or equal to 60000.
+
+SELECT dept_name, COUNT(*) as NUM_INST, 
+       avg(salary) as AVG_SAL, 
+	   sum(salary) as SUM_SAL
+FROM instructor
+WHERE NOT (dept_name = 'Physics' or dept_name = 'History')
+GROUP BY dept_name
+HAVING avg(salary) >= 60000
+ORDER BY COUNT(*) DESC;
+
+
+
+
+
+
+
+
+
+
