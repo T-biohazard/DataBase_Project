@@ -1,0 +1,153 @@
+1.Query all columns for all American cities in the CITY table with populations larger than 100000. The CountryCode for America is USA.
+ans:select* from city where population>100000 and countrycode='USA';  
+
+2.Query the NAME field for all American cities in the CITY table with populations larger than 120000. The CountryCode for America is USA.
+ans:select name from city where population>120000 and countrycode='USA';
+
+3.Query all columns (attributes) for every row in the CITY table.
+ans:select* from city;
+
+4.Query all columns for a city in CITY with the ID 1661.
+ans:select* from city where id='1661';
+
+5.Query all attributes of every Japanese city in the CITY table. The COUNTRYCODE for Japan is JPN.
+ans:select* from city where countrycode='JPN';
+
+6.Query the names of all the Japanese cities in the CITY table. The COUNTRYCODE for Japan is JPN.
+ans:select name from city where countrycode='JPN';
+
+7.Query a list of CITY and STATE from the STATION table.
+ans:select city,state from station;
+
+8.Query a list of CITY names from STATION for cities that have an even ID number. Print the results in any order, but exclude duplicates from the answer.
+ans:select distinct city from station where id%2=0;
+
+9.Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table.
+ans:select count(city)-count(distinct city) from station;
+
+10.Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically.
+ans:select city,length(city) from station order by length(city) asc, city asc limit 1;
+    select city,length(city) from station order by length(city) desc, city asc limit 1;
+
+11.Query the list of CITY names starting with vowels (i.e., a, e, i, o, or u) from STATION. Your result cannot contain duplicates.
+ans:select distinct city from station where left(city,1) in ('a','e','i','o','u');
+
+12.Query the list of CITY names ending with vowels (a, e, i, o, u) from STATION. Your result cannot contain duplicates.
+ans:select distinct city from station where right(city,1) in ('a','e','i','o','u');
+
+13.Query the list of CITY names from STATION which have vowels (i.e., a, e, i, o, and u) as both their first and last characters. Your result cannot contain duplicates.
+ans:select distinct city from station where left(city,1) in ('a','e','i','o','u') and right(city,1) in ('a','e','i','o','u');
+
+14.Query the list of CITY names from STATION that do not start with vowels. Your result cannot contain duplicates.
+ans:select distinct city from station where left(city,1) not in ('a','e','i','o','u');
+
+15.Query the list of CITY names from STATION that do not end with vowels. Your result cannot contain duplicates.
+ans:select distinct city from station where right(city,1) not in ('a','e','i','o','u');
+
+16.Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates.
+ans:select distinct city from station where left(city,1) not in ('a','e','i','o','u') or right(city,1) not in ('a','e','i','o','u');
+
+17.Query the list of CITY names from STATION that do not start with vowels and do not end with vowels. Your result cannot contain duplicates.
+ans:select distinct city from station where left(city,1) not in ('a','e','i','o','u') and right(city,1) not in ('a','e','i','o','u');
+
+18.Query the Name of any student in STUDENTS who scored higher than 75 Marks. Order your output by the last three characters of each name. If two or more students both have names ending in the same last three characters (i.e.: Bobby, Robby, etc.), secondary sort them by ascending ID.
+ans:select name from students where marks>75 order by right(name,3), id asc;
+
+19.Write a query that prints a list of employee names (i.e.: the name attribute) from the Employee table in alphabetical order.
+ans:select name from employee order by name;
+
+20.Write a query that prints a list of employee names (i.e.: the name attribute) for employees in Employee having a salary greater than $2000 per month who have been employees for less than 10 months. Sort your result by ascending employee_id.
+ans:select name from employee where salary>2000 and months<10 order by employee_id asc;
+
+21.Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. Output one of the following statements for each record in the table:
+ans:select 
+    case 
+    when A+B <= C or B+C <= A or A+C <= B then "Not A Triangle"
+    when A=B and B=C then "Equilateral"
+    when A=B or B=C or A=C then "Isosceles"
+    when A!=B and B!=C and C!=A then "Scalene"
+    end as sides
+    from triangles;
+
+22.Query a count of the number of cities in CITY having a Population larger than 100000.
+ans:select count(district) from city where population>100000;
+
+23.Query the total population of all cities in CITY where District is California.
+ans:select sum(population) from city where district='California';
+
+24.Query the average population of all cities in CITY where District is California.
+ans:select avg(population) from city where district='California';
+
+25.Query the average population for all cities in CITY, rounded down to the nearest integer.
+ans:select floor(avg(population)) from city;
+
+26.Query the sum of the populations for all Japanese cities in CITY. The COUNTRYCODE for Japan is JPN.
+ans:select sum(population) from city where countrycode='JPN';
+
+27.Query the difference between the maximum and minimum populations in CITY.
+ans:select max(population)-min(population) from city;
+
+28.Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's  key was broken until after completing the calculation. She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
+Write a query calculating the amount of error (i.e.:actual-miscalculated  average monthly salaries), and round it up to the next integer.
+ans:select ceil(avg(salary)-avg(replace(salary,'0',''))) from employees;
+
+29.Query the following two values from the STATION table:
+The sum of all values in LAT_N rounded to a scale of 2 decimal places.
+The sum of all values in LONG_W rounded to a scale of 2 decimal places.
+ans:select round(sum(LAT_N),2), round(sum(LONG_W),2) from station;
+
+30.Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than 38.7880 and less than 137.2345. Truncate your answer to 4 decimal places.
+ans:select round(sum(LAT_N),4) from station where LAT_N>38.7880 and LAT_N<137.2345;
+
+31.Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than 137.2345. Truncate your answer to 4 decimal places.
+ans:select round(max(LAT_N),4) from station where LAT_N<137.2345;
+
+32.Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than 137.2345. Round your answer to 4 decimal places.
+ans:select round(max(LONG_W),4) from station where LAT_N=(select max(LAT_N) from station where LAT_N<137.2345);
+
+33.Query the smallest Northern Latitude (LAT_N) from STATION that is greater than 38.7780. Round your answer to 4 decimal places.
+ans:select round(min(LAT_N),4) from station where LAT_N>38.7780;
+
+34.Query the Western Longitude (LONG_W)where the smallest Northern Latitude (LAT_N) in STATION is greater than 38.7780. Round your answer to 4 decimal places.
+ans:select round((LONG_W),4) from station where LAT_N=(select min(LAT_N) from station where LAT_N>38.7780);
+
+35.Consider P1(a,b) and P2(c,d) to be two points on a 2D plane.
+
+ a happens to equal the minimum value in Northern Latitude (LAT_N in STATION).
+ b happens to equal the minimum value in Western Longitude (LONG_W in STATION).
+ c happens to equal the maximum value in Northern Latitude (LAT_N in STATION).
+ d happens to equal the maximum value in Western Longitude (LONG_W in STATION).
+Query the Manhattan Distance between points P1 and P2 and round it to a scale of 4 decimal places.
+
+ans:select round(abs(max(LAT_N)-min(LAT_N))+abs(max(LONG_W)-min(LONG_W)),4) from station;
+
+36.Consider P1(a,c) and P2(b,d) to be two points on a 2D plane where (a,b) are the respective minimum and maximum values of Northern Latitude (LAT_N) and (c,d) are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION.
+
+Query the Euclidean Distance between points P1 and P2 and format your answer to display 4 decimal digits.
+
+ans:select round(sqrt(power((max(LAT_N)-min(LAT_N)),2)+power((max(LONG_W)-min(LONG_W)),2)),4) from station;
+
+37.Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+
+ans:select sum(city.population) from city join country on city.countrycode=country.code where country.continent='Asia';
+
+38.Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+
+ans:select city.name from city join country on city.countrycode=country.code where country.continent='Africa';
+
+39.Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+
+ans:select country.continent,floor(avg(city.population)) from city join country on city.countrycode=country.code group by country.continent;
+
+
+
+
+
+
+
+
+
+
